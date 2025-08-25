@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>Slow Mirror 4 Controller</title>
+<meta name="viewport" content="width=device-width"/>
+<style type="text/css">
+body { background:#CCC; font-family:sans-serif; text-align:center }
+#states { line-height:1.8 }
+#states span { background:white; font-size:small; margin:1.5px; padding:2px }
+button { width:8ex; height:6ex; font-size:large;
+	appearance:none; padding:0px; border-radius:1ex; background-color:#EEE }
+</style>
+<script type="text/javascript">
+let stateTexts, buttons, timerID = -1;
+function call(com) {
+	fetch(com).then((res)=>{
+		if (res.ok) return res.json()
+		else return res.text()
+		},
+		()=>{clearInterval(timerID); alert('Connection Lost.')})
+	.then((obj)=>{
+		if (typeof obj == "object") {
+			document.getElementById('monitor').textContent=
+				`Camera ${(obj.camera==0)?'Off':'On'}, State #${obj.state+1}`
+			let flags = obj.button
+			for (let i = 0; i < 4; i ++, flags >>= 1)
+				buttons[i].disabled = ((flags & 1) == 0)
+			for (let i = 0; i < stateTexts.length; i ++)
+				stateTexts[i].style = 'color:' + ((i == obj.state)? 'black' : 'gray')
+		} else if (obj) alert(obj);
+	})
+}
+function setup() {
+	stateTexts = document.getElementById('states').children
+	buttons = document.getElementById('buttons').children
+	timerID = setInterval(()=>{call('state')}, 500)
+}
+</script>
+</head>
+<body onload="setup()">
+<h1>Slow Mirror 4 Controller</h1>
+<p id="states">
+<span>Projection Off</span>
+<span>Black</span>
+<span>Fade In</span>
+<span>Camera Image</span>
+<span>Delayed</span>
+<span>Freeze</span>
+<span>Camera Fade Out</span>
+<span>Rain</span>
+<span>Fede Out</span>
+<span>Black</span>
+</p>
+<p id="monitor">---</p>
+<p id="buttons">
+<button onclick="call('toggleCamera')">Camera</button>
+<button onclick="call('restart')">Restart</button>
+<button onclick="call('back')">Back</button>
+<button onclick="call('next')">Next</button>
+</p>
+<p>&copy; Tatsuo Unemi, 2025.</p>
+</body>
+</html>
