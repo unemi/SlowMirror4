@@ -32,6 +32,7 @@ extern NSUInteger current_time_us(void);
 
 @interface AppDelegate : NSObject <NSApplicationDelegate,
 	NSMenuItemValidation, NSWindowDelegate>
+@property (readonly) NSUndoManager *undoManager;
 - (PrefParams *)params;
 - (void)preferenceChanged:(PrefPrmTag)tag;
 - (void)setStateStep:(MyState)step;

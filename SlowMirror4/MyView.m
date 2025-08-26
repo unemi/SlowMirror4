@@ -77,7 +77,7 @@ static NSString *actionNames[] = {
 	if (!(self = [super initWithFrame:frame])) return nil;
 	monitorView = mntView;
 	widthRate = wRate;
-	undoManager = NSUndoManager.new;
+	undoManager = ((AppDelegate *)NSApp.delegate).undoManager;
 	filter = [CIFilter perspectiveTransformFilter];
 	bitmapLock = NSConditionLock.new;
 	cornerID = -2;
@@ -184,26 +184,49 @@ static NSString *actionNames[] = {
 	[self reviseAreaPathAndFilterParams];
 	[super setFrameSize:newSize];
 }
+static simd_double2 cross_point(
+	simd_double2 tl, simd_double2 tr, simd_double2 bl, simd_double2 br) {
+	simd_double2 dt = tr - tl, db = br - bl;
+	CGFloat gv = dt.y * db.x - db.y * dt.x;
+	return (fabs(gv) < 1e-6)? (simd_double2){NAN, NAN} :	// parallel
+		(dt.yx * db * tl - db.yx * dt * bl
+			- dt * db * (tl.yx - bl.yx)) / (simd_double2){gv, -gv};
+}
 - (void)reviseCorners:(CGFloat)newRate {
 	union { Corners *c;
 		struct { simd_double2 tl, tr, br, bl; } *s; } cs = {.c = &corners};
-	simd_double2 dt = cs.s->tr - cs.s->tl, db = cs.s->br - cs.s->bl;
-	CGFloat gv = dt.y * db.x - db.y * dt.x, r = (1. - newRate / widthRate) / 2.;
-	if (fabs(gv) < 1e-6) {	// parallel
-		simd_double2 d = dt * r;
+	simd_double2 cp = cross_point(cs.s->tl, cs.s->tr, cs.s->bl, cs.s->br);
+	CGFloat r = (1. - newRate / widthRate) / 2.;
+	if (isnan(cp.x)) {
+		simd_double2 d = (cs.s->tr - cs.s->tl) * r;
 		cs.s->tl += d; cs.s->tr -= d;
-		d = db * r;
+		d = (cs.s->br - cs.s->bl) * r;
 		cs.s->bl += d; cs.s->br -= d;
 	} else {
-		simd_double2 p = (dt.yx * db * cs.s->tl - db.yx * dt * cs.s->bl
-			- dt * db * (cs.s->tl.yx - cs.s->bl.yx)) / (simd_double2){gv, -gv};
-		CGFloat d = exp(log(simd_distance(cs.s->tr, p) / simd_distance(cs.s->tl, p)) * r);
-		cs.s->tl = (cs.s->tl - p) * d + p;
-		cs.s->tr = (cs.s->tr - p) / d + p;
-		d = exp(log(simd_distance(cs.s->br, p) / simd_distance(cs.s->bl, p)) * r);
-		cs.s->bl = (cs.s->bl - p) * d + p;
-		cs.s->br = (cs.s->br - p) / d + p;
+		CGFloat d = exp(log(simd_distance(cs.s->tr, cp) / simd_distance(cs.s->tl, cp)) * r);
+		cs.s->tl = (cs.s->tl - cp) * d + cp;
+		cs.s->tr = (cs.s->tr - cp) / d + cp;
+		d = exp(log(simd_distance(cs.s->br, cp) / simd_distance(cs.s->bl, cp)) * r);
+		cs.s->bl = (cs.s->bl - cp) * d + cp;
+		cs.s->br = (cs.s->br - cp) / d + cp;
 	}
+//	simd_double2 dt = cs.s->tr - cs.s->tl, db = cs.s->br - cs.s->bl;
+//	CGFloat gv = dt.y * db.x - db.y * dt.x, r = (1. - newRate / widthRate) / 2.;
+//	if (fabs(gv) < 1e-6) {	// parallel
+//		simd_double2 d = dt * r;
+//		cs.s->tl += d; cs.s->tr -= d;
+//		d = db * r;
+//		cs.s->bl += d; cs.s->br -= d;
+//	} else {
+//		simd_double2 p = (dt.yx * db * cs.s->tl - db.yx * dt * cs.s->bl
+//			- dt * db * (cs.s->tl.yx - cs.s->bl.yx)) / (simd_double2){gv, -gv};
+//		CGFloat d = exp(log(simd_distance(cs.s->tr, p) / simd_distance(cs.s->tl, p)) * r);
+//		cs.s->tl = (cs.s->tl - p) * d + p;
+//		cs.s->tr = (cs.s->tr - p) / d + p;
+//		d = exp(log(simd_distance(cs.s->br, p) / simd_distance(cs.s->bl, p)) * r);
+//		cs.s->bl = (cs.s->bl - p) * d + p;
+//		cs.s->br = (cs.s->br - p) / d + p;
+//	}
 	widthRate = newRate;
 	[self reviseAreaPathAndFilterParams];
 	self.needsDisplay = YES;

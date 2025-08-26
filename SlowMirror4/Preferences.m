@@ -57,7 +57,7 @@ Preferences *thePreference = nil;
 - (void)setCamera:(MyCamera *)myCam {
 	params = ((AppDelegate *)NSApp.delegate).params;
 	union pf *q = (union pf *)params;
-	undoManager = NSUndoManager.new;
+	undoManager = ((AppDelegate *)NSApp.delegate).undoManager;
 	pTitles = NSMutableArray.new;
 	pInputs = NSMutableArray.new;
 	pSliders = NSMutableArray.new;

@@ -395,6 +395,8 @@ static void setup_screen_popup(NSPopUpButton *popUp, NSTextField *szTx, NSView *
 	}
 }
 - (void)initiate {
+	_undoManager = NSUndoManager.new;
+
 	CGFloat originY = stateText.frame.origin.y;
 	stateTexts = NSMutableArray.new;
 	for (NSTextField *item in mainWindow.contentView.subviews) {

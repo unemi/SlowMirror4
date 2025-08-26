@@ -8,6 +8,8 @@
 
 /* Begin PBXFileReference section */
 		231D162A2E43362500AD3263 /* SlowMirror4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlowMirror4.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		23D790DE2E4C076A00F5BD90 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		23D790E02E4C079000F5BD90 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,6 +35,7 @@
 			isa = PBXGroup;
 			children = (
 				231D162C2E43362500AD3263 /* SlowMirror4 */,
+				23D790DD2E4C076A00F5BD90 /* Frameworks */,
 				231D162B2E43362500AD3263 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +46,15 @@
 				231D162A2E43362500AD3263 /* SlowMirror4.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		23D790DD2E4C076A00F5BD90 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				23D790E02E4C079000F5BD90 /* Metal.framework */,
+				23D790DE2E4C076A00F5BD90 /* CoreImage.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,18 +261,25 @@
 				CODE_SIGN_ENTITLEMENTS = SlowMirror4/SlowMirror4.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 726X5Z9867;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "Slow Mirror 4";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Capturing the dancer on the stage.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2009, 2025.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Receiving OSC messages.";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
+				MTLLINKER_FLAGS = "-fcikernel";
+				MTL_COMPILER_FLAGS = "-fcikernel";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.SlowMirror4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -276,18 +295,25 @@
 				CODE_SIGN_ENTITLEMENTS = SlowMirror4/SlowMirror4.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 726X5Z9867;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "Slow Mirror 4";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Capturing the dancer on the stage.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2009, 2025.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Receiving OSC messages.";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
+				MTLLINKER_FLAGS = "-fcikernel";
+				MTL_COMPILER_FLAGS = "-fcikernel";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.SlowMirror4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
